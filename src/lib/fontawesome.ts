@@ -1,0 +1,52 @@
+// Font Awesome icon library setup
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faCalendarDays,
+  faClock,
+  faUsers,
+  faVideo,
+  faMapMarkerAlt,
+  faPlus,
+  faEdit,
+  faTrash,
+  faEllipsisV,
+  faMinus,
+  faEnvelope,
+  faSearch,
+  faFilter,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faBars,
+  faCog,
+  faUser,
+  faLaptopCode,
+  faGripVertical
+} from '@fortawesome/free-solid-svg-icons';
+
+// Add icons to the library
+library.add(
+  faCalendarDays,
+  faClock,
+  faUsers,
+  faVideo,
+  faMapMarkerAlt,
+  faPlus,
+  faEdit,
+  faTrash,
+  faEllipsisV,
+  faMinus,
+  faEnvelope,
+  faSearch,
+  faFilter,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faBars,
+  faCog,
+  faUser,
+  faLaptopCode,
+  faGripVertical
+);
