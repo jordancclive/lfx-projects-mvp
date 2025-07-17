@@ -83,12 +83,6 @@ export function CommitteeCard({ committee, onAddMember, onRemoveMember, onChange
             )}
           </div>
           <p className="text-sm text-muted-foreground">{committee.description}</p>
-          {committee.meetingSchedule && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Calendar className="h-4 w-4" />
-              {committee.meetingSchedule}
-            </div>
-          )}
         </CardHeader>
 
         <CardContent>
@@ -102,7 +96,7 @@ export function CommitteeCard({ committee, onAddMember, onRemoveMember, onChange
               )}
             </div>
             
-            <div className="space-y-2">
+            <div className="max-h-64 overflow-y-auto space-y-2">
               {committee.members.map((member) => (
                 <div
                   key={member.id}
@@ -124,14 +118,14 @@ export function CommitteeCard({ committee, onAddMember, onRemoveMember, onChange
                   <div className="flex items-center gap-2">
                     <Badge 
                       variant={getRoleBadgeVariant(member.role)}
-                      className="text-xs flex items-center gap-1"
+                      className="text-xs flex items-center gap-1 font-normal"
                     >
                       {getRoleIcon(member.role)}
                       {member.role.replace('-', ' ')}
                     </Badge>
                     
                     {member.isVoting && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-xs font-normal">
                         Voting
                       </Badge>
                     )}

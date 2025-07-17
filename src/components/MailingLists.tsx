@@ -281,7 +281,9 @@ const MailingLists = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MailingList
                                 </Badge>
                               ))
                             ) : (
-                              <p className="font-medium text-muted-foreground text-xs">{list.committee}</p>
+                              <Badge variant="outline" className="text-xs font-normal">
+                                {list.committee}
+                              </Badge>
                             )}
                           </div>
                         </div>
