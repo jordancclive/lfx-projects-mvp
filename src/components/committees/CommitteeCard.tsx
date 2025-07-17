@@ -116,13 +116,15 @@ export function CommitteeCard({ committee, onAddMember, onRemoveMember, onChange
                   </div>
                   
                   <div className="flex items-center gap-2">
-                    <Badge 
-                      variant={getRoleBadgeVariant(member.role)}
-                      className="text-xs flex items-center gap-1 font-normal"
-                    >
-                      {getRoleIcon(member.role)}
-                      {member.role.replace('-', ' ')}
-                    </Badge>
+                    {!(member.role === 'voting-member' && member.isVoting) && (
+                      <Badge 
+                        variant={getRoleBadgeVariant(member.role)}
+                        className="text-xs flex items-center gap-1 font-normal"
+                      >
+                        {getRoleIcon(member.role)}
+                        {member.role.replace('-', ' ')}
+                      </Badge>
+                    )}
                     
                     {member.isVoting && (
                       <Badge variant="outline" className="text-xs font-normal">
