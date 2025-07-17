@@ -44,11 +44,19 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
     })}`;
   };
 
+  const getTimeDisplay = () => {
+    if (meeting.isLiveNow) {
+      return 'in 10 minutes';
+    }
+    return formatTime(meeting.time, meeting.duration);
+  };
+
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
   const isPast = meeting.status === 'past';
+  const isLiveNow = meeting.isLiveNow;
 
   const handleMenuAction = (action: string) => {
     console.log(`${action} action for meeting:`, meeting.id);
@@ -64,10 +72,15 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
               <h3 className="text-lg font-semibold text-foreground truncate">
                 {meeting.title}
               </h3>
-              <ProjectTag />
+              <ProjectTag projectName={meeting.project} />
               {meeting.recurring && (
                 <Badge variant="outline" className="text-xs">
                   {meeting.recurring}
+                </Badge>
+              )}
+              {isLiveNow && (
+                <Badge variant="destructive" className="text-xs animate-pulse">
+                  Starting Soon
                 </Badge>
               )}
             </div>
@@ -130,7 +143,7 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
           </div>
           <div className="flex items-center gap-2">
             <FontAwesomeIcon icon="clock" className="h-4 w-4 text-primary" />
-            <span>{formatTime(meeting.time, meeting.duration)} {meeting.timezone}</span>
+            <span>{getTimeDisplay()} {meeting.timezone}</span>
           </div>
         </div>
 
@@ -165,13 +178,23 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
         </div>
 
         {/* Actions */}
-        {!isPast && (
+        {isPast ? (
           <div className="flex items-center gap-2 pt-2">
             <Button variant="secondary" size="sm" className="flex-1">
+              <FontAwesomeIcon icon="video" className="h-4 w-4 mr-2" />
+              View Recording
+            </Button>
+          </div>
+        ) : isLiveNow ? (
+          <div className="flex items-center gap-2 pt-2">
+            <Button variant="default" size="sm" className="flex-1 bg-green-600 hover:bg-green-700">
               <FontAwesomeIcon icon="video" className="h-4 w-4 mr-2" />
               Join Meeting
             </Button>
           </div>
+        ) : (
+          // For upcoming meetings (not live), don't show Join Meeting button
+          null
         )}
       </CardContent>
     </Card>

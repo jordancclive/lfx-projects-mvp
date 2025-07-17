@@ -13,6 +13,8 @@ export interface Meeting {
   location: string;
   recurring: string | null;
   status: 'upcoming' | 'past';
+  project: string;
+  isLiveNow?: boolean;
 }
 
 export interface MeetingFilters {

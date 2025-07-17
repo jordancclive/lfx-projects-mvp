@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MeetingCard } from '@/components/meetings/MeetingCard';
 import { MeetingCalendar } from '@/components/meetings/MeetingCalendar';
 import { MeetingFilters } from '@/components/meetings/MeetingFilters';
+import { useProject } from '@/components/AppSidebar';
 import type { Meeting } from '@/types/meeting';
 
 interface MeetingsProps {
@@ -17,6 +18,25 @@ interface MeetingsProps {
 
 // Mock data for meetings
 const mockMeetings: Meeting[] = [
+  // Live meeting starting in 10 minutes
+  {
+    id: '0',
+    title: 'Security Working Group Standup',
+    description: 'Weekly security team sync and vulnerability review',
+    date: '2025-07-17',
+    time: '10:10',
+    duration: 30,
+    timezone: 'UTC',
+    committee: 'Security Working Group',
+    organizer: 'Alex Chen',
+    attendees: 8,
+    videoLink: 'https://zoom.us/j/security123',
+    location: 'Virtual',
+    recurring: 'Weekly',
+    status: 'upcoming' as const,
+    project: 'CNCF',
+    isLiveNow: true
+  },
   // Upcoming meetings in August 2025
   {
     id: '1',
@@ -32,7 +52,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://zoom.us/j/123456789',
     location: 'Virtual',
     recurring: 'Monthly',
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'Kubernetes'
   },
   {
     id: '2',
@@ -48,7 +69,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://teams.microsoft.com/l/meetup-join/abc',
     location: 'Virtual',
     recurring: 'Weekly',
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'OpenJS Foundation'
   },
   {
     id: '3',
@@ -64,7 +86,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://meet.google.com/abc-defg-hij',
     location: 'Virtual',
     recurring: null,
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'Hyperledger'
   },
   {
     id: '4',
@@ -80,7 +103,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://zoom.us/j/987654321',
     location: 'Virtual',
     recurring: 'Monthly',
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'SPDX'
   },
   {
     id: '5',
@@ -96,7 +120,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://teams.microsoft.com/l/meetup-join/xyz',
     location: 'Virtual',
     recurring: 'Bi-weekly',
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'TODO Group'
   },
   {
     id: '6',
@@ -112,7 +137,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://zoom.us/j/456789123',
     location: 'Virtual',
     recurring: 'Quarterly',
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'Linux Foundation'
   },
   {
     id: '7',
@@ -128,7 +154,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://meet.google.com/def-ghij-klm',
     location: 'Virtual',
     recurring: null,
-    status: 'upcoming' as const
+    status: 'upcoming' as const,
+    project: 'CNCF'
   },
   // Past meetings from July 2025
   {
@@ -145,7 +172,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://zoom.us/j/789123456',
     location: 'Virtual',
     recurring: null,
-    status: 'past' as const
+    status: 'past' as const,
+    project: 'Kubernetes'
   },
   {
     id: '9',
@@ -161,7 +189,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://zoom.us/j/456789123',
     location: 'Virtual',
     recurring: null,
-    status: 'past' as const
+    status: 'past' as const,
+    project: 'Linux Foundation'
   },
   {
     id: '10',
@@ -177,7 +206,8 @@ const mockMeetings: Meeting[] = [
     videoLink: 'https://teams.microsoft.com/l/meetup-join/sec',
     location: 'Virtual',
     recurring: null,
-    status: 'past' as const
+    status: 'past' as const,
+    project: 'Hyperledger'
   }
 ];
 
@@ -190,8 +220,9 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
   });
   const [activeTab, setActiveTab] = useState('upcoming');
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
+  const { selectedProject } = useProject();
 
-  // Filter meetings based on search and filters
+  // Filter meetings based on search, filters, and selected project
   const filteredMeetings = mockMeetings.filter(meeting => {
     const matchesSearch = meeting.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          meeting.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -200,10 +231,13 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
     const matchesRecurring = !selectedFilters.recurring || meeting.recurring === selectedFilters.recurring;
     const matchesOrganizer = !selectedFilters.organizer || meeting.organizer === selectedFilters.organizer;
     
+    // Project filtering
+    const matchesProject = selectedProject === 'All Projects' || meeting.project === selectedProject;
+    
     // For calendar view, show all meetings; for list view, filter by tab
     const matchesTab = viewMode === 'calendar' || meeting.status === activeTab;
 
-    return matchesSearch && matchesCommittee && matchesRecurring && matchesOrganizer && matchesTab;
+    return matchesSearch && matchesCommittee && matchesRecurring && matchesOrganizer && matchesProject && matchesTab;
   });
 
   const upcomingCount = mockMeetings.filter(m => m.status === 'upcoming').length;

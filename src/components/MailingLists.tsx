@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Mail, Plus, Settings, Users, Globe, Lock, MoreVertical, Search, Clock } from 'lucide-react';
 import { ProjectTag } from '@/components/ui/project-tag';
+import { useProject } from '@/components/AppSidebar';
 import { toast } from '@/hooks/use-toast';
 
 // Mock data for existing mailing lists
@@ -24,7 +25,8 @@ const mockMailingLists = [
     status: 'active',
     moderators: ['john@example.com', 'sarah@example.com'],
     committee: 'Core Development',
-    created: '2023-06-15'
+    created: '2023-06-15',
+    project: 'Kubernetes'
   },
   {
     id: '2',
@@ -35,7 +37,8 @@ const mockMailingLists = [
     status: 'active',
     moderators: ['admin@example.com'],
     committee: 'Leadership',
-    created: '2023-01-10'
+    created: '2023-01-10',
+    project: 'CNCF'
   },
   {
     id: '3',
@@ -46,7 +49,8 @@ const mockMailingLists = [
     status: 'active',
     moderators: ['security@example.com', 'lead@example.com'],
     committee: 'Security Working Group',
-    created: '2023-03-22'
+    created: '2023-03-22',
+    project: 'Hyperledger'
   },
   {
     id: '4',
@@ -57,7 +61,32 @@ const mockMailingLists = [
     status: 'pending',
     moderators: ['product@example.com'],
     committee: 'Product Team',
-    created: '2024-01-15'
+    created: '2024-01-15',
+    project: 'OpenJS Foundation'
+  },
+  {
+    id: '5',
+    name: 'community@project.org',
+    description: 'Community discussions and event planning',
+    isPublic: true,
+    subscriberCount: 156,
+    status: 'active',
+    moderators: ['community@example.com'],
+    committee: 'Community Outreach',
+    created: '2023-09-12',
+    project: 'TODO Group'
+  },
+  {
+    id: '6',
+    name: 'licensing@project.org',
+    description: 'Software licensing discussions and compliance',
+    isPublic: false,
+    subscriberCount: 42,
+    status: 'active',
+    moderators: ['legal@example.com', 'compliance@example.com'],
+    committee: 'Legal Working Group',
+    created: '2023-04-18',
+    project: 'SPDX'
   }
 ];
 
@@ -85,12 +114,17 @@ const MailingLists = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MailingList
     committee: '',
     moderators: ''
   });
+  const { selectedProject } = useProject();
 
-  const filteredLists = mockMailingLists.filter(list =>
-    list.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    list.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    list.committee.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredLists = mockMailingLists.filter(list => {
+    const matchesSearch = list.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      list.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      list.committee.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesProject = selectedProject === 'All Projects' || list.project === selectedProject;
+    
+    return matchesSearch && matchesProject;
+  });
 
   const handleCreateList = () => {
     // Simulate API call
@@ -205,7 +239,7 @@ const MailingLists = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MailingList
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-lg font-semibold text-foreground">{list.name}</h3>
-                        <ProjectTag />
+                        <ProjectTag projectName={list.project} />
                         <Badge variant={list.isPublic ? "secondary" : "outline"}>
                           {list.isPublic ? (
                             <>
