@@ -9,6 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Search } from 'lucide-react';
 
 interface CreateMeetingDialogProps {
   open: boolean;
@@ -23,14 +26,24 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
     time: '',
     duration: 60,
     timezone: 'UTC',
-    committee: '',
     selectedCommittees: [] as string[],
     selectedIndividuals: [] as string[],
-    videoLink: '',
-    location: 'Virtual',
     isRecurring: false,
-    recurringPattern: 'weekly'
+    recurringPattern: 'weekly',
+    showInPublicCalendar: true,
+    restrictToInvitedUsers: true,
+    allowEarlyJoin: true,
+    recordMeeting: true,
+    generateTranscripts: true,
+    uploadToYoutube: true,
+    enableZoomAI: true,
+    reviewAISummary: true
   });
+
+  const [committeeSearchTerm, setCommitteeSearchTerm] = useState('');
+  const [individualSearchTerm, setIndividualSearchTerm] = useState('');
+  const [committeeDropdownOpen, setCommitteeDropdownOpen] = useState(false);
+  const [individualDropdownOpen, setIndividualDropdownOpen] = useState(false);
 
   const committees = [
     'Technical Steering Committee',
@@ -83,19 +96,34 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
       time: '',
       duration: 60,
       timezone: 'UTC',
-      committee: '',
       selectedCommittees: [],
       selectedIndividuals: [],
-      videoLink: '',
-      location: 'Virtual',
       isRecurring: false,
-      recurringPattern: 'weekly'
+      recurringPattern: 'weekly',
+      showInPublicCalendar: true,
+      restrictToInvitedUsers: true,
+      allowEarlyJoin: true,
+      recordMeeting: true,
+      generateTranscripts: true,
+      uploadToYoutube: true,
+      enableZoomAI: true,
+      reviewAISummary: true
     });
+    setCommitteeSearchTerm('');
+    setIndividualSearchTerm('');
   };
 
   const updateFormData = (key: string, value: any) => {
     setFormData(prev => ({ ...prev, [key]: value }));
   };
+
+  const filteredCommittees = committees.filter(committee =>
+    committee.toLowerCase().includes(committeeSearchTerm.toLowerCase())
+  );
+
+  const filteredIndividuals = individuals.filter(individual =>
+    individual.toLowerCase().includes(individualSearchTerm.toLowerCase())
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -135,22 +163,6 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
                   rows={3}
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="committee">Primary Committee *</Label>
-                <Select value={formData.committee} onValueChange={(value) => updateFormData('committee', value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select primary committee" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {committees.map(committee => (
-                      <SelectItem key={committee} value={committee}>
-                        {committee}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
             </CardContent>
           </Card>
 
@@ -164,51 +176,97 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <Label>Additional Committees</Label>
-                <div className="grid grid-cols-1 gap-2 max-h-32 overflow-y-auto">
-                  {committees.map(committee => (
-                    <div key={committee} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`committee-${committee}`}
-                        checked={formData.selectedCommittees.includes(committee)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            updateFormData('selectedCommittees', [...formData.selectedCommittees, committee]);
-                          } else {
-                            updateFormData('selectedCommittees', formData.selectedCommittees.filter(c => c !== committee));
-                          }
-                        }}
+                <Label>Committees</Label>
+                <Popover open={committeeDropdownOpen} onOpenChange={setCommitteeDropdownOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative">
+                      <Input
+                        placeholder="Search committees..."
+                        value={committeeSearchTerm}
+                        onChange={(e) => setCommitteeSearchTerm(e.target.value)}
+                        onFocus={() => setCommitteeDropdownOpen(true)}
+                        className="pr-8"
                       />
-                      <Label htmlFor={`committee-${committee}`} className="text-sm">
-                        {committee}
-                      </Label>
+                      <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     </div>
-                  ))}
-                </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <ScrollArea className="max-h-48">
+                      <div className="p-2 space-y-2">
+                        {filteredCommittees.map(committee => (
+                          <div key={committee} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`committee-${committee}`}
+                              checked={formData.selectedCommittees.includes(committee)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  updateFormData('selectedCommittees', [...formData.selectedCommittees, committee]);
+                                } else {
+                                  updateFormData('selectedCommittees', formData.selectedCommittees.filter(c => c !== committee));
+                                }
+                              }}
+                            />
+                            <Label htmlFor={`committee-${committee}`} className="text-sm cursor-pointer">
+                              {committee}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </PopoverContent>
+                </Popover>
+                {formData.selectedCommittees.length > 0 && (
+                  <div className="text-sm text-muted-foreground">
+                    Selected: {formData.selectedCommittees.join(', ')}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-3">
-                <Label>Individual Participants</Label>
-                <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
-                  {individuals.map(individual => (
-                    <div key={individual} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`individual-${individual}`}
-                        checked={formData.selectedIndividuals.includes(individual)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            updateFormData('selectedIndividuals', [...formData.selectedIndividuals, individual]);
-                          } else {
-                            updateFormData('selectedIndividuals', formData.selectedIndividuals.filter(i => i !== individual));
-                          }
-                        }}
+                <Label>Individuals</Label>
+                <Popover open={individualDropdownOpen} onOpenChange={setIndividualDropdownOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative">
+                      <Input
+                        placeholder="Search individuals..."
+                        value={individualSearchTerm}
+                        onChange={(e) => setIndividualSearchTerm(e.target.value)}
+                        onFocus={() => setIndividualDropdownOpen(true)}
+                        className="pr-8"
                       />
-                      <Label htmlFor={`individual-${individual}`} className="text-sm">
-                        {individual}
-                      </Label>
+                      <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     </div>
-                  ))}
-                </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0" align="start">
+                    <ScrollArea className="max-h-48">
+                      <div className="p-2 space-y-2">
+                        {filteredIndividuals.map(individual => (
+                          <div key={individual} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`individual-${individual}`}
+                              checked={formData.selectedIndividuals.includes(individual)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  updateFormData('selectedIndividuals', [...formData.selectedIndividuals, individual]);
+                                } else {
+                                  updateFormData('selectedIndividuals', formData.selectedIndividuals.filter(i => i !== individual));
+                                }
+                              }}
+                            />
+                            <Label htmlFor={`individual-${individual}`} className="text-sm cursor-pointer">
+                              {individual}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </PopoverContent>
+                </Popover>
+                {formData.selectedIndividuals.length > 0 && (
+                  <div className="text-sm text-muted-foreground">
+                    Selected: {formData.selectedIndividuals.join(', ')}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -283,6 +341,100 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
             </CardContent>
           </Card>
 
+
+          {/* Meeting Settings */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <FontAwesomeIcon icon="cog" className="h-4 w-4" />
+                Meeting Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="showInPublicCalendar">Show in Public Calendar</Label>
+                  <Switch
+                    id="showInPublicCalendar"
+                    checked={formData.showInPublicCalendar}
+                    onCheckedChange={(value) => updateFormData('showInPublicCalendar', value)}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="restrictToInvitedUsers">Restrict to invited users</Label>
+                  <Switch
+                    id="restrictToInvitedUsers"
+                    checked={formData.restrictToInvitedUsers}
+                    onCheckedChange={(value) => updateFormData('restrictToInvitedUsers', value)}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="allowEarlyJoin">Let users join 10 min early</Label>
+                  <Switch
+                    id="allowEarlyJoin"
+                    checked={formData.allowEarlyJoin}
+                    onCheckedChange={(value) => updateFormData('allowEarlyJoin', value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="recordMeeting">Record Meeting</Label>
+                    <Switch
+                      id="recordMeeting"
+                      checked={formData.recordMeeting}
+                      onCheckedChange={(value) => updateFormData('recordMeeting', value)}
+                    />
+                  </div>
+                  {formData.recordMeeting && (
+                    <div className="ml-6 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="generateTranscripts" className="text-sm">Generate Transcripts</Label>
+                        <Switch
+                          id="generateTranscripts"
+                          checked={formData.generateTranscripts}
+                          onCheckedChange={(value) => updateFormData('generateTranscripts', value)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="uploadToYoutube" className="text-sm">Upload to YouTube</Label>
+                        <Switch
+                          id="uploadToYoutube"
+                          checked={formData.uploadToYoutube}
+                          onCheckedChange={(value) => updateFormData('uploadToYoutube', value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="enableZoomAI">Enable Zoom AI</Label>
+                    <Switch
+                      id="enableZoomAI"
+                      checked={formData.enableZoomAI}
+                      onCheckedChange={(value) => updateFormData('enableZoomAI', value)}
+                    />
+                  </div>
+                  {formData.enableZoomAI && (
+                    <div className="ml-6">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="reviewAISummary" className="text-sm">Review AI Summary before sharing?</Label>
+                        <Switch
+                          id="reviewAISummary"
+                          checked={formData.reviewAISummary}
+                          onCheckedChange={(value) => updateFormData('reviewAISummary', value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Recurring Settings */}
           <Card>
