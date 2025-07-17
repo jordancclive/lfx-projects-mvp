@@ -27,9 +27,19 @@ const mockMeetings: Meeting[] = [
     time: '10:10',
     duration: 30,
     timezone: 'UTC',
-    committee: 'Security Working Group',
+    committees: ['Security Working Group', 'Technical Steering Committee'],
     organizer: 'Alex Chen',
     attendees: 8,
+    attendeesList: [
+      { name: 'Alex Chen', role: 'Organizer' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' }
+    ],
     videoLink: 'https://zoom.us/j/security123',
     location: 'Virtual',
     recurring: 'Weekly',
@@ -46,9 +56,23 @@ const mockMeetings: Meeting[] = [
     time: '15:00',
     duration: 60,
     timezone: 'UTC',
-    committee: 'Technical Steering Committee',
+    committees: ['Technical Steering Committee'],
     organizer: 'Jane Smith',
     attendees: 12,
+    attendeesList: [
+      { name: 'Jane Smith', role: 'Organizer' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' },
+      { name: 'James Wilson', role: 'Member' },
+      { name: 'Amy Chen', role: 'Member' }
+    ],
     videoLink: 'https://zoom.us/j/123456789',
     location: 'Virtual',
     recurring: 'Monthly',
@@ -63,9 +87,21 @@ const mockMeetings: Meeting[] = [
     time: '09:00',
     duration: 30,
     timezone: 'UTC',
-    committee: 'Core Team',
+    committees: ['Core Team', 'Documentation Team'],
     organizer: 'Emma Davis',
     attendees: 10,
+    attendeesList: [
+      { name: 'Emma Davis', role: 'Organizer' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' }
+    ],
     videoLink: 'https://teams.microsoft.com/l/meetup-join/abc',
     location: 'Virtual',
     recurring: 'Weekly',
@@ -80,9 +116,26 @@ const mockMeetings: Meeting[] = [
     time: '14:00',
     duration: 120,
     timezone: 'UTC',
-    committee: 'Core Team',
+    committees: ['Core Team'],
     organizer: 'Mike Johnson',
     attendees: 15,
+    attendeesList: [
+      { name: 'Mike Johnson', role: 'Organizer' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' },
+      { name: 'James Wilson', role: 'Member' },
+      { name: 'Amy Chen', role: 'Member' },
+      { name: 'Chris Brown', role: 'Member' },
+      { name: 'Pat Wilson', role: 'Member' },
+      { name: 'Sam Davis', role: 'Member' }
+    ],
     videoLink: 'https://meet.google.com/abc-defg-hij',
     location: 'Virtual',
     recurring: null,
@@ -97,9 +150,17 @@ const mockMeetings: Meeting[] = [
     time: '10:00',
     duration: 90,
     timezone: 'UTC',
-    committee: 'Security Working Group',
+    committees: ['Security Working Group'],
     organizer: 'Alex Chen',
     attendees: 6,
+    attendeesList: [
+      { name: 'Alex Chen', role: 'Organizer' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' }
+    ],
     videoLink: 'https://zoom.us/j/987654321',
     location: 'Virtual',
     recurring: 'Monthly',
@@ -114,9 +175,23 @@ const mockMeetings: Meeting[] = [
     time: '16:00',
     duration: 60,
     timezone: 'UTC',
-    committee: 'Outreach Working Group',
+    committees: ['Outreach Working Group'],
     organizer: 'Sarah Wilson',
     attendees: 12,
+    attendeesList: [
+      { name: 'Sarah Wilson', role: 'Organizer' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' },
+      { name: 'James Wilson', role: 'Member' },
+      { name: 'Amy Chen', role: 'Member' }
+    ],
     videoLink: 'https://teams.microsoft.com/l/meetup-join/xyz',
     location: 'Virtual',
     recurring: 'Bi-weekly',
@@ -131,9 +206,19 @@ const mockMeetings: Meeting[] = [
     time: '13:00',
     duration: 180,
     timezone: 'UTC',
-    committee: 'Governing Board',
+    committees: ['Governing Board'],
     organizer: 'Robert Taylor',
     attendees: 8,
+    attendeesList: [
+      { name: 'Robert Taylor', role: 'Organizer' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' }
+    ],
     videoLink: 'https://zoom.us/j/456789123',
     location: 'Virtual',
     recurring: 'Quarterly',
@@ -148,9 +233,19 @@ const mockMeetings: Meeting[] = [
     time: '11:00',
     duration: 90,
     timezone: 'UTC',
-    committee: 'Technical Steering Committee',
+    committees: ['Technical Steering Committee'],
     organizer: 'Lisa Wang',
     attendees: 8,
+    attendeesList: [
+      { name: 'Lisa Wang', role: 'Organizer' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' }
+    ],
     videoLink: 'https://meet.google.com/def-ghij-klm',
     location: 'Virtual',
     recurring: null,
@@ -166,9 +261,23 @@ const mockMeetings: Meeting[] = [
     time: '14:30',
     duration: 120,
     timezone: 'UTC',
-    committee: 'Core Team',
+    committees: ['Core Team'],
     organizer: 'David Miller',
     attendees: 12,
+    attendeesList: [
+      { name: 'David Miller', role: 'Organizer' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' },
+      { name: 'James Wilson', role: 'Member' },
+      { name: 'Amy Chen', role: 'Member' }
+    ],
     videoLink: 'https://zoom.us/j/789123456',
     location: 'Virtual',
     recurring: null,
@@ -183,9 +292,21 @@ const mockMeetings: Meeting[] = [
     time: '10:00',
     duration: 180,
     timezone: 'UTC',
-    committee: 'Governing Board',
+    committees: ['Governing Board'],
     organizer: 'Robert Taylor',
     attendees: 10,
+    attendeesList: [
+      { name: 'Robert Taylor', role: 'Organizer' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Alex Chen', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' }
+    ],
     videoLink: 'https://zoom.us/j/456789123',
     location: 'Virtual',
     recurring: null,
@@ -200,9 +321,26 @@ const mockMeetings: Meeting[] = [
     time: '15:00',
     duration: 90,
     timezone: 'UTC',
-    committee: 'Security Working Group',
+    committees: ['Security Working Group'],
     organizer: 'Alex Chen',
     attendees: 15,
+    attendeesList: [
+      { name: 'Alex Chen', role: 'Organizer' },
+      { name: 'Sarah Wilson', role: 'Member' },
+      { name: 'Mike Johnson', role: 'Member' },
+      { name: 'Lisa Wang', role: 'Member' },
+      { name: 'David Miller', role: 'Member' },
+      { name: 'Emma Davis', role: 'Member' },
+      { name: 'Robert Taylor', role: 'Member' },
+      { name: 'Jane Smith', role: 'Member' },
+      { name: 'Tom Anderson', role: 'Member' },
+      { name: 'Maria Garcia', role: 'Member' },
+      { name: 'James Wilson', role: 'Member' },
+      { name: 'Amy Chen', role: 'Member' },
+      { name: 'Chris Brown', role: 'Member' },
+      { name: 'Pat Wilson', role: 'Member' },
+      { name: 'Sam Davis', role: 'Member' }
+    ],
     videoLink: 'https://teams.microsoft.com/l/meetup-join/sec',
     location: 'Virtual',
     recurring: null,
@@ -227,7 +365,7 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
     const matchesSearch = meeting.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          meeting.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesCommittee = !selectedFilters.committee || meeting.committee === selectedFilters.committee;
+    const matchesCommittee = !selectedFilters.committee || meeting.committees.includes(selectedFilters.committee);
     const matchesRecurring = !selectedFilters.recurring || meeting.recurring === selectedFilters.recurring;
     const matchesOrganizer = !selectedFilters.organizer || meeting.organizer === selectedFilters.organizer;
     
@@ -312,8 +450,8 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-6">
-              {/* Only show tabs in list view, otherwise show empty div for spacing */}
-              {viewMode === 'list' && (
+              {/* Only show tabs in list view */}
+              {viewMode === 'list' ? (
                 <div className="flex border-b border-border">
                   <button
                     onClick={() => setActiveTab('upcoming')}
@@ -338,10 +476,12 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
                     Past ({pastCount})
                   </button>
                 </div>
+              ) : (
+                <div></div>
               )}
               
               {/* View Mode Switcher - always on right side */}
-              <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+              <div className="flex items-center gap-1 bg-muted rounded-lg p-1 ml-auto">
                 <Button
                   variant={viewMode === 'list' ? 'default' : 'ghost'}
                   size="sm"

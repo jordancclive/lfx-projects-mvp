@@ -6,9 +6,10 @@ export interface Meeting {
   time: string;
   duration: number;
   timezone: string;
-  committee: string;
+  committees: string[];
   organizer: string;
   attendees: number;
+  attendeesList: Array<{ name: string; role: string }>;
   videoLink: string;
   location: string;
   recurring: string | null;

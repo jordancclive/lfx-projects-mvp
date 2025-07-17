@@ -107,7 +107,7 @@ export const MeetingCalendar = ({ meetings }: MeetingCalendarProps) => {
                     </div>
                     <div className="flex items-center gap-1">
                       <FontAwesomeIcon icon="users" className="h-3 w-3" />
-                      {meeting.committee}
+                      {meeting.committees.join(', ')}
                     </div>
                   </div>
                   {meeting.description && (

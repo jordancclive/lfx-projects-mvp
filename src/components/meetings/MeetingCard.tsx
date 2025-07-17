@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +11,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { MoreVertical, Edit, Trash2, Users, Calendar, Video, Copy } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, Users, Calendar, Video, Copy, ChevronDown, ChevronUp } from 'lucide-react';
 import { ProjectTag } from '@/components/ui/project-tag';
 import type { Meeting } from '@/types/meeting';
 
@@ -19,6 +20,7 @@ interface MeetingCardProps {
 }
 
 export const MeetingCard = ({ meeting }: MeetingCardProps) => {
+  const [showAttendees, setShowAttendees] = useState(false);
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', {
@@ -142,11 +144,11 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
           </div>
         </div>
 
-        {/* Committee */}
+        {/* Committees */}
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="flex items-center gap-2">
             <FontAwesomeIcon icon="users" className="h-4 w-4 text-primary" />
-            <span>{meeting.committee}</span>
+            <span className="text-muted-foreground">{meeting.committees.join(', ')}</span>
           </div>
         </div>
 
@@ -162,11 +164,39 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
               Organized by <span className="font-medium text-foreground">{meeting.organizer}</span>
             </span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowAttendees(!showAttendees)}
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+          >
             <FontAwesomeIcon icon="users" className="h-4 w-4" />
             <span>{meeting.attendees} attendees</span>
-          </div>
+            {showAttendees ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
         </div>
+
+        {/* Expandable Attendees List */}
+        {showAttendees && (
+          <div className="mt-4 pt-4 border-t border-border animate-fade-in">
+            <h4 className="text-sm font-medium mb-3">Attendees ({meeting.attendees})</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {meeting.attendeesList.map((attendee, index) => (
+                <div key={index} className="flex items-center gap-2 text-sm">
+                  <Avatar className="h-5 w-5">
+                    <AvatarFallback className="text-xs">
+                      {getInitials(attendee.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-foreground">{attendee.name}</span>
+                  {attendee.role === 'Organizer' && (
+                    <Badge variant="secondary" className="text-xs">Organizer</Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Actions */}
         {isPast ? (

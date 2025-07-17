@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface CreateMeetingDialogProps {
   open: boolean;
@@ -23,6 +24,8 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
     duration: 60,
     timezone: 'UTC',
     committee: '',
+    selectedCommittees: [] as string[],
+    selectedIndividuals: [] as string[],
     videoLink: '',
     location: 'Virtual',
     isRecurring: false,
@@ -35,6 +38,21 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
     'Outreach Working Group',
     'Security Working Group',
     'Documentation Team'
+  ];
+
+  const individuals = [
+    'Alex Chen',
+    'Sarah Wilson',
+    'Mike Johnson',
+    'Lisa Wang',
+    'David Miller',
+    'Emma Davis',
+    'Robert Taylor',
+    'Jane Smith',
+    'Tom Anderson',
+    'Maria Garcia',
+    'James Wilson',
+    'Amy Chen'
   ];
 
   const timezones = [
@@ -66,6 +84,8 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
       duration: 60,
       timezone: 'UTC',
       committee: '',
+      selectedCommittees: [],
+      selectedIndividuals: [],
       videoLink: '',
       location: 'Virtual',
       isRecurring: false,
@@ -117,10 +137,10 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="committee">Committee *</Label>
+                <Label htmlFor="committee">Primary Committee *</Label>
                 <Select value={formData.committee} onValueChange={(value) => updateFormData('committee', value)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select committee" />
+                    <SelectValue placeholder="Select primary committee" />
                   </SelectTrigger>
                   <SelectContent>
                     {committees.map(committee => (
@@ -130,6 +150,65 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Participants */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <FontAwesomeIcon icon="users" className="h-4 w-4" />
+                Participants
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <Label>Additional Committees</Label>
+                <div className="grid grid-cols-1 gap-2 max-h-32 overflow-y-auto">
+                  {committees.map(committee => (
+                    <div key={committee} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`committee-${committee}`}
+                        checked={formData.selectedCommittees.includes(committee)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            updateFormData('selectedCommittees', [...formData.selectedCommittees, committee]);
+                          } else {
+                            updateFormData('selectedCommittees', formData.selectedCommittees.filter(c => c !== committee));
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`committee-${committee}`} className="text-sm">
+                        {committee}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label>Individual Participants</Label>
+                <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
+                  {individuals.map(individual => (
+                    <div key={individual} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`individual-${individual}`}
+                        checked={formData.selectedIndividuals.includes(individual)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            updateFormData('selectedIndividuals', [...formData.selectedIndividuals, individual]);
+                          } else {
+                            updateFormData('selectedIndividuals', formData.selectedIndividuals.filter(i => i !== individual));
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`individual-${individual}`} className="text-sm">
+                        {individual}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -11,7 +11,7 @@ interface MeetingFiltersProps {
 }
 
 export const MeetingFilters = ({ filters, onFiltersChange, meetings }: MeetingFiltersProps) => {
-  const committees = [...new Set(meetings.map(m => m.committee))];
+  const committees = [...new Set(meetings.flatMap(m => m.committees))];
   const organizers = [...new Set(meetings.map(m => m.organizer))];
   const recurringOptions = [...new Set(meetings.map(m => m.recurring).filter(Boolean))];
 
