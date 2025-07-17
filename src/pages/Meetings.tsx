@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Calendar, Clock, Filter, Search } from 'lucide-react';
+import { Calendar, Clock, Filter, Search, List, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MeetingCard } from '@/components/meetings/MeetingCard';
+import { MeetingCalendar } from '@/components/meetings/MeetingCalendar';
 import { MeetingFilters } from '@/components/meetings/MeetingFilters';
 import type { Meeting } from '@/types/meeting';
 
@@ -16,11 +17,12 @@ interface MeetingsProps {
 
 // Mock data for meetings
 const mockMeetings: Meeting[] = [
+  // Upcoming meetings in August 2025
   {
     id: '1',
     title: 'Technical Steering Committee',
     description: 'Monthly technical review and roadmap discussion',
-    date: '2024-01-20',
+    date: '2025-08-05',
     time: '15:00',
     duration: 60,
     timezone: 'UTC',
@@ -34,34 +36,147 @@ const mockMeetings: Meeting[] = [
   },
   {
     id: '2',
-    title: 'Project Planning Session',
-    description: 'Q1 planning and goal setting for the upcoming release',
-    date: '2024-01-25',
+    title: 'Weekly Team Standup',
+    description: 'Weekly progress updates and sprint planning',
+    date: '2025-08-19',
+    time: '09:00',
+    duration: 30,
+    timezone: 'UTC',
+    committee: 'Core Team',
+    organizer: 'Emma Davis',
+    attendees: 10,
+    videoLink: 'https://teams.microsoft.com/l/meetup-join/abc',
+    location: 'Virtual',
+    recurring: 'Weekly',
+    status: 'upcoming' as const
+  },
+  {
+    id: '3',
+    title: 'Q3 Planning Session',
+    description: 'Q3 goal setting and resource planning for upcoming initiatives',
+    date: '2025-08-12',
     time: '14:00',
-    duration: 90,
+    duration: 120,
     timezone: 'UTC',
     committee: 'Core Team',
     organizer: 'Mike Johnson',
-    attendees: 8,
+    attendees: 15,
     videoLink: 'https://meet.google.com/abc-defg-hij',
     location: 'Virtual',
     recurring: null,
     status: 'upcoming' as const
   },
   {
-    id: '3',
-    title: 'Community Outreach Meeting',
-    description: 'Discussing community engagement strategies and upcoming events',
-    date: '2024-01-15',
+    id: '4',
+    title: 'Security Audit Review',
+    description: 'Monthly security assessment and vulnerability review',
+    date: '2025-08-08',
+    time: '10:00',
+    duration: 90,
+    timezone: 'UTC',
+    committee: 'Security Working Group',
+    organizer: 'Alex Chen',
+    attendees: 6,
+    videoLink: 'https://zoom.us/j/987654321',
+    location: 'Virtual',
+    recurring: 'Monthly',
+    status: 'upcoming' as const
+  },
+  {
+    id: '5',
+    title: 'Community Outreach Planning',
+    description: 'Planning upcoming community events and engagement strategies',
+    date: '2025-08-22',
     time: '16:00',
-    duration: 45,
+    duration: 60,
     timezone: 'UTC',
     committee: 'Outreach Working Group',
     organizer: 'Sarah Wilson',
-    attendees: 15,
+    attendees: 12,
     videoLink: 'https://teams.microsoft.com/l/meetup-join/xyz',
     location: 'Virtual',
     recurring: 'Bi-weekly',
+    status: 'upcoming' as const
+  },
+  {
+    id: '6',
+    title: 'Board Meeting',
+    description: 'Quarterly board meeting to discuss strategic initiatives',
+    date: '2025-08-30',
+    time: '13:00',
+    duration: 180,
+    timezone: 'UTC',
+    committee: 'Governing Board',
+    organizer: 'Robert Taylor',
+    attendees: 8,
+    videoLink: 'https://zoom.us/j/456789123',
+    location: 'Virtual',
+    recurring: 'Quarterly',
+    status: 'upcoming' as const
+  },
+  {
+    id: '7',
+    title: 'Architecture Review',
+    description: 'Review proposed architecture changes and design decisions',
+    date: '2025-08-15',
+    time: '11:00',
+    duration: 90,
+    timezone: 'UTC',
+    committee: 'Technical Steering Committee',
+    organizer: 'Lisa Wang',
+    attendees: 8,
+    videoLink: 'https://meet.google.com/def-ghij-klm',
+    location: 'Virtual',
+    recurring: null,
+    status: 'upcoming' as const
+  },
+  // Past meetings from July 2025
+  {
+    id: '8',
+    title: 'Release Planning Workshop',
+    description: 'Planning for the next major release and feature prioritization',
+    date: '2025-07-10',
+    time: '14:30',
+    duration: 120,
+    timezone: 'UTC',
+    committee: 'Core Team',
+    organizer: 'David Miller',
+    attendees: 12,
+    videoLink: 'https://zoom.us/j/789123456',
+    location: 'Virtual',
+    recurring: null,
+    status: 'past' as const
+  },
+  {
+    id: '9',
+    title: 'Mid-Year Review',
+    description: 'Review of H1 achievements and H2 planning',
+    date: '2025-07-05',
+    time: '10:00',
+    duration: 180,
+    timezone: 'UTC',
+    committee: 'Governing Board',
+    organizer: 'Robert Taylor',
+    attendees: 10,
+    videoLink: 'https://zoom.us/j/456789123',
+    location: 'Virtual',
+    recurring: null,
+    status: 'past' as const
+  },
+  {
+    id: '10',
+    title: 'Security Incident Response Training',
+    description: 'Training session on incident response procedures',
+    date: '2025-07-08',
+    time: '15:00',
+    duration: 90,
+    timezone: 'UTC',
+    committee: 'Security Working Group',
+    organizer: 'Alex Chen',
+    attendees: 15,
+    videoLink: 'https://teams.microsoft.com/l/meetup-join/sec',
+    location: 'Virtual',
+    recurring: null,
     status: 'past' as const
   }
 ];
@@ -74,6 +189,7 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
     organizer: ''
   });
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
 
   // Filter meetings based on search and filters
   const filteredMeetings = mockMeetings.filter(meeting => {
@@ -83,7 +199,9 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
     const matchesCommittee = !selectedFilters.committee || meeting.committee === selectedFilters.committee;
     const matchesRecurring = !selectedFilters.recurring || meeting.recurring === selectedFilters.recurring;
     const matchesOrganizer = !selectedFilters.organizer || meeting.organizer === selectedFilters.organizer;
-    const matchesTab = meeting.status === activeTab;
+    
+    // For calendar view, show all meetings; for list view, filter by tab
+    const matchesTab = viewMode === 'calendar' || meeting.status === activeTab;
 
     return matchesSearch && matchesCommittee && matchesRecurring && matchesOrganizer && matchesTab;
   });
@@ -137,7 +255,7 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">This Month</span>
                     <Badge variant="secondary">
-                      {mockMeetings.filter(m => m.date.startsWith('2024-01')).length}
+                      {mockMeetings.filter(m => m.date.startsWith('2025-08')).length}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
@@ -153,8 +271,9 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-6">
+              {/* Only show tabs in list view, otherwise show empty div for spacing */}
+              {viewMode === 'list' ? (
                 <TabsList className="grid w-full max-w-xs grid-cols-2 bg-transparent p-0 h-auto">
                   <TabsTrigger 
                     value="upcoming" 
@@ -171,65 +290,98 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
                     Past ({pastCount})
                   </TabsTrigger>
                 </TabsList>
-
+              ) : (
+                <div></div>
+              )}
+              
+              {/* View Mode Switcher - always on right side */}
+              <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => {
+                    setViewMode('list');
+                    setActiveTab('upcoming'); // Default to upcoming when switching to list view
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <List className="h-4 w-4" />
+                  List
+                </Button>
+                <Button
+                  variant={viewMode === 'calendar' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('calendar')}
+                  className="flex items-center gap-2"
+                >
+                  <CalendarDays className="h-4 w-4" />
+                  Calendar
+                </Button>
               </div>
+            </div>
 
-              <TabsContent value="upcoming" className="space-y-4">
-                {filteredMeetings.length > 0 ? (
-                  <div className="grid gap-4">
-                    {filteredMeetings.map((meeting, index) => (
-                      <div 
-                        key={meeting.id} 
-                        className="animate-slide-up"
-                        style={{ animationDelay: `${index * 100}ms` }}
-                      >
-                        <MeetingCard meeting={meeting} />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <Card className="shadow-soft">
-                    <CardContent className="flex flex-col items-center justify-center py-12">
-                      <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No upcoming meetings</h3>
-                      <p className="text-muted-foreground text-center">
-                        {searchQuery || Object.values(selectedFilters).some(f => f) 
-                          ? "No meetings match your current search or filters."
-                          : "You don't have any upcoming meetings scheduled."}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
+            {/* Conditional rendering based on view mode */}
+            {viewMode === 'calendar' ? (
+              <MeetingCalendar meetings={filteredMeetings} />
+            ) : (
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+                <TabsContent value="upcoming" className="space-y-4">
+                  {filteredMeetings.length > 0 ? (
+                    <div className="grid gap-4">
+                      {filteredMeetings.map((meeting, index) => (
+                        <div 
+                          key={meeting.id} 
+                          className="animate-slide-up"
+                          style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                          <MeetingCard meeting={meeting} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="shadow-soft">
+                      <CardContent className="flex flex-col items-center justify-center py-12">
+                        <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">No upcoming meetings</h3>
+                        <p className="text-muted-foreground text-center">
+                          {searchQuery || Object.values(selectedFilters).some(f => f) 
+                            ? "No meetings match your current search or filters."
+                            : "You don't have any upcoming meetings scheduled."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </TabsContent>
 
-              <TabsContent value="past" className="space-y-4">
-                {filteredMeetings.length > 0 ? (
-                  <div className="grid gap-4">
-                    {filteredMeetings.map((meeting, index) => (
-                      <div 
-                        key={meeting.id} 
-                        className="animate-slide-up"
-                        style={{ animationDelay: `${index * 100}ms` }}
-                      >
-                        <MeetingCard meeting={meeting} />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <Card className="shadow-soft">
-                    <CardContent className="flex flex-col items-center justify-center py-12">
-                      <Clock className="h-12 w-12 text-muted-foreground mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No past meetings</h3>
-                      <p className="text-muted-foreground text-center">
-                        {searchQuery || Object.values(selectedFilters).some(f => f) 
-                          ? "No meetings match your current search or filters."
-                          : "No past meetings found."}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
-            </Tabs>
+                <TabsContent value="past" className="space-y-4">
+                  {filteredMeetings.length > 0 ? (
+                    <div className="grid gap-4">
+                      {filteredMeetings.map((meeting, index) => (
+                        <div 
+                          key={meeting.id} 
+                          className="animate-slide-up"
+                          style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                          <MeetingCard meeting={meeting} />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Card className="shadow-soft">
+                      <CardContent className="flex flex-col items-center justify-center py-12">
+                        <Clock className="h-12 w-12 text-muted-foreground mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">No past meetings</h3>
+                        <p className="text-muted-foreground text-center">
+                          {searchQuery || Object.values(selectedFilters).some(f => f) 
+                            ? "No meetings match your current search or filters."
+                            : "No past meetings found."}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </TabsContent>
+              </Tabs>
+            )}
           </div>
         </div>
       </div>

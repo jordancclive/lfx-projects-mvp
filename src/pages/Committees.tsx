@@ -203,7 +203,7 @@ const Committees = () => {
       <div className="bg-background">
         <div className="container mx-auto px-6 pt-6 pb-8">
           <div className="animate-fade-in">
-            <h1 className="text-2xl font-bold text-foreground font-heading">Committees</h1>
+            <h1 className="text-3xl font-bold text-foreground font-heading">Committees</h1>
             <p className="text-muted-foreground mt-1">
               Manage committee members, roles, and organizational structure
             </p>
