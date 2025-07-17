@@ -33,14 +33,14 @@ const Collaboration = () => {
             <TabsList className="grid w-full max-w-md grid-cols-2 bg-transparent p-0 h-auto">
               <TabsTrigger 
                 value="meetings" 
-                className="flex items-center gap-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground border-b-2 border-transparent rounded-none pb-2"
+                className="flex items-center gap-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground border-b-2 border-transparent rounded-none pb-2 font-semibold text-sm"
               >
                 <FontAwesomeIcon icon="calendar-days" className="h-4 w-4" />
                 Meetings
               </TabsTrigger>
               <TabsTrigger 
                 value="mailing-lists" 
-                className="flex items-center gap-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground border-b-2 border-transparent rounded-none pb-2"
+                className="flex items-center gap-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground border-b-2 border-transparent rounded-none pb-2 font-semibold text-sm"
               >
                 <FontAwesomeIcon icon="envelope" className="h-4 w-4" />
                 Mailing Lists

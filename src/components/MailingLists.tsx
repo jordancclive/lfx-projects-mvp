@@ -25,6 +25,7 @@ const mockMailingLists = [
     status: 'active',
     moderators: ['john@example.com', 'sarah@example.com'],
     committee: 'Core Development',
+    committees: ['Core Development', 'Technical Steering Committee'],
     created: '2023-06-15',
     project: 'Kubernetes'
   },
@@ -49,6 +50,7 @@ const mockMailingLists = [
     status: 'active',
     moderators: ['security@example.com', 'lead@example.com'],
     committee: 'Security Working Group',
+    committees: ['Security Working Group', 'Compliance Working Group'],
     created: '2023-03-22',
     project: 'Hyperledger'
   },
@@ -73,6 +75,7 @@ const mockMailingLists = [
     status: 'active',
     moderators: ['community@example.com'],
     committee: 'Community Outreach',
+    committees: ['Community Outreach', 'Events Team'],
     created: '2023-09-12',
     project: 'TODO Group'
   },
@@ -270,7 +273,17 @@ const MailingLists = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MailingList
                         </div>
                         <div>
                           <p className="text-muted-foreground">Committee</p>
-                          <p className="font-medium">{list.committee}</p>
+                          <div className="flex flex-wrap gap-1">
+                            {list.committees ? (
+                              list.committees.map((committee, index) => (
+                                <Badge key={index} variant="outline" className="text-xs font-normal">
+                                  {committee}
+                                </Badge>
+                              ))
+                            ) : (
+                              <p className="font-medium text-muted-foreground text-xs">{list.committee}</p>
+                            )}
+                          </div>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Moderators</p>

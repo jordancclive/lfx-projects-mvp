@@ -455,7 +455,7 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
                 <div className="flex border-b border-border">
                   <button
                     onClick={() => setActiveTab('upcoming')}
-                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
+                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors text-sm ${
                       activeTab === 'upcoming'
                         ? 'border-primary text-foreground'
                         : 'border-transparent text-muted-foreground hover:text-foreground'
@@ -466,7 +466,7 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
                   </button>
                   <button
                     onClick={() => setActiveTab('past')}
-                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
+                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors text-sm ${
                       activeTab === 'past'
                         ? 'border-primary text-foreground'
                         : 'border-transparent text-muted-foreground hover:text-foreground'
