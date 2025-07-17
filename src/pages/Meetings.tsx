@@ -293,6 +293,12 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Attendance</span>
+                    <Badge variant="secondary">
+                      87%
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Recurring</span>
                     <Badge variant="secondary">
                       {mockMeetings.filter(m => m.recurring).length}
@@ -307,25 +313,31 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
           <div className="lg:col-span-3">
             <div className="flex items-center justify-between mb-6">
               {/* Only show tabs in list view, otherwise show empty div for spacing */}
-              {viewMode === 'list' ? (
-                <TabsList className="grid w-full max-w-xs grid-cols-2 bg-transparent p-0 h-auto">
-                  <TabsTrigger 
-                    value="upcoming" 
-                    className="flex items-center gap-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground border-b-2 border-transparent rounded-none pb-2"
+              {viewMode === 'list' && (
+                <div className="flex border-b border-border">
+                  <button
+                    onClick={() => setActiveTab('upcoming')}
+                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
+                      activeTab === 'upcoming'
+                        ? 'border-primary text-foreground'
+                        : 'border-transparent text-muted-foreground hover:text-foreground'
+                    }`}
                   >
                     <Calendar className="h-4 w-4" />
                     Upcoming ({upcomingCount})
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="past" 
-                    className="flex items-center gap-2 bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:border-b-2 data-[state=active]:border-primary text-muted-foreground border-b-2 border-transparent rounded-none pb-2"
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('past')}
+                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
+                      activeTab === 'past'
+                        ? 'border-primary text-foreground'
+                        : 'border-transparent text-muted-foreground hover:text-foreground'
+                    }`}
                   >
                     <Clock className="h-4 w-4" />
                     Past ({pastCount})
-                  </TabsTrigger>
-                </TabsList>
-              ) : (
-                <div></div>
+                  </button>
+                </div>
               )}
               
               {/* View Mode Switcher - always on right side */}
@@ -358,63 +370,67 @@ const Meetings = ({ isCreateDialogOpen, setIsCreateDialogOpen }: MeetingsProps) 
             {viewMode === 'calendar' ? (
               <MeetingCalendar meetings={filteredMeetings} />
             ) : (
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                <TabsContent value="upcoming" className="space-y-4">
-                  {filteredMeetings.length > 0 ? (
-                    <div className="grid gap-4">
-                      {filteredMeetings.map((meeting, index) => (
-                        <div 
-                          key={meeting.id} 
-                          className="animate-slide-up"
-                          style={{ animationDelay: `${index * 100}ms` }}
-                        >
-                          <MeetingCard meeting={meeting} />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <Card className="shadow-soft">
-                      <CardContent className="flex flex-col items-center justify-center py-12">
-                        <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
-                        <h3 className="text-lg font-semibold mb-2">No upcoming meetings</h3>
-                        <p className="text-muted-foreground text-center">
-                          {searchQuery || Object.values(selectedFilters).some(f => f) 
-                            ? "No meetings match your current search or filters."
-                            : "You don't have any upcoming meetings scheduled."}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
-                </TabsContent>
+              <div className="space-y-6">
+                {activeTab === 'upcoming' && (
+                  <div className="space-y-4">
+                    {filteredMeetings.length > 0 ? (
+                      <div className="grid gap-4">
+                        {filteredMeetings.map((meeting, index) => (
+                          <div 
+                            key={meeting.id} 
+                            className="animate-slide-up"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                          >
+                            <MeetingCard meeting={meeting} />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <Card className="shadow-soft">
+                        <CardContent className="flex flex-col items-center justify-center py-12">
+                          <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
+                          <h3 className="text-lg font-semibold mb-2">No upcoming meetings</h3>
+                          <p className="text-muted-foreground text-center">
+                            {searchQuery || Object.values(selectedFilters).some(f => f) 
+                              ? "No meetings match your current search or filters."
+                              : "You don't have any upcoming meetings scheduled."}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                )}
 
-                <TabsContent value="past" className="space-y-4">
-                  {filteredMeetings.length > 0 ? (
-                    <div className="grid gap-4">
-                      {filteredMeetings.map((meeting, index) => (
-                        <div 
-                          key={meeting.id} 
-                          className="animate-slide-up"
-                          style={{ animationDelay: `${index * 100}ms` }}
-                        >
-                          <MeetingCard meeting={meeting} />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <Card className="shadow-soft">
-                      <CardContent className="flex flex-col items-center justify-center py-12">
-                        <Clock className="h-12 w-12 text-muted-foreground mb-4" />
-                        <h3 className="text-lg font-semibold mb-2">No past meetings</h3>
-                        <p className="text-muted-foreground text-center">
-                          {searchQuery || Object.values(selectedFilters).some(f => f) 
-                            ? "No meetings match your current search or filters."
-                            : "No past meetings found."}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  )}
-                </TabsContent>
-              </Tabs>
+                {activeTab === 'past' && (
+                  <div className="space-y-4">
+                    {filteredMeetings.length > 0 ? (
+                      <div className="grid gap-4">
+                        {filteredMeetings.map((meeting, index) => (
+                          <div 
+                            key={meeting.id} 
+                            className="animate-slide-up"
+                            style={{ animationDelay: `${index * 100}ms` }}
+                          >
+                            <MeetingCard meeting={meeting} />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <Card className="shadow-soft">
+                        <CardContent className="flex flex-col items-center justify-center py-12">
+                          <Clock className="h-12 w-12 text-muted-foreground mb-4" />
+                          <h3 className="text-lg font-semibold mb-2">No past meetings</h3>
+                          <p className="text-muted-foreground text-center">
+                            {searchQuery || Object.values(selectedFilters).some(f => f) 
+                              ? "No meetings match your current search or filters."
+                              : "No past meetings found."}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

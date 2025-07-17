@@ -37,7 +37,7 @@ All colors MUST be HSL.
     --input: 220 13% 91%;
     --ring: 217 91% 35%;
 
-    --success: 142 76% 36%;
+    --success: 160 84% 39%; /* #10BC8A emerald hue */
     --success-foreground: 0 0% 100%;
     
     --warning: 38 92% 50%;

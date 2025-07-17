@@ -204,36 +204,6 @@ export const CreateMeetingDialog = ({ open, onOpenChange }: CreateMeetingDialogP
             </CardContent>
           </Card>
 
-          {/* Location and Video */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                <FontAwesomeIcon icon="map-marker-alt" className="h-4 w-4" />
-                Location & Video
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  value={formData.location}
-                  onChange={(e) => updateFormData('location', e.target.value)}
-                  placeholder="Virtual, Conference Room A, etc."
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="videoLink">Video Conference Link</Label>
-                <Input
-                  id="videoLink"
-                  value={formData.videoLink}
-                  onChange={(e) => updateFormData('videoLink', e.target.value)}
-                  placeholder="https://zoom.us/j/... or https://meet.google.com/..."
-                />
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Recurring Settings */}
           <Card>

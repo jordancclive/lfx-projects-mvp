@@ -78,11 +78,6 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
                   {meeting.recurring}
                 </Badge>
               )}
-              {isLiveNow && (
-                <Badge variant="destructive" className="text-xs animate-pulse">
-                  Starting Soon
-                </Badge>
-              )}
             </div>
             <p className="text-sm text-muted-foreground line-clamp-2">
               {meeting.description}
@@ -147,15 +142,11 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
           </div>
         </div>
 
-        {/* Committee and Location */}
+        {/* Committee */}
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="flex items-center gap-2">
             <FontAwesomeIcon icon="users" className="h-4 w-4 text-primary" />
             <span>{meeting.committee}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon="map-marker-alt" className="h-4 w-4 text-primary" />
-            <span>{meeting.location}</span>
           </div>
         </div>
 
@@ -187,7 +178,7 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
           </div>
         ) : isLiveNow ? (
           <div className="flex items-center gap-2 pt-2">
-            <Button variant="default" size="sm" className="flex-1 bg-green-600 hover:bg-green-700">
+            <Button variant="default" size="sm" className="flex-1 bg-success hover:bg-success/90 text-success-foreground">
               <FontAwesomeIcon icon="video" className="h-4 w-4 mr-2" />
               Join Meeting
             </Button>
