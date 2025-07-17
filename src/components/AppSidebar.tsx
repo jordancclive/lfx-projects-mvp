@@ -120,7 +120,7 @@ export function AppSidebar() {
             <DropdownMenu open={isProductMenuOpen} onOpenChange={setIsProductMenuOpen}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <FontAwesomeIcon icon="th" className="h-3 w-3" />
+                  <FontAwesomeIcon icon="grid" className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" side="right" sideOffset={8} className="w-56">

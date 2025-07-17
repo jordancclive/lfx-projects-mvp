@@ -7,10 +7,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppSidebar, ProjectProvider } from "./components/AppSidebar";
 import Collaboration from "./pages/Collaboration";
 import Committees from "./pages/Committees";
-import Analytics from "./pages/Analytics";
-import Documentation from "./pages/Documentation";
-import Support from "./pages/Support";
-import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,10 +26,6 @@ const App = () => (
                   <Route path="/" element={<Navigate to="/collaboration" replace />} />
                   <Route path="/collaboration" element={<Collaboration />} />
                   <Route path="/committees" element={<Committees />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/documentation" element={<Documentation />} />
-                  <Route path="/support" element={<Support />} />
-                  <Route path="/profile" element={<Profile />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
