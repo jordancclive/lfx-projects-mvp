@@ -1,4 +1,4 @@
-import { Calendar, Users } from 'lucide-react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState, createContext, useContext } from 'react';
@@ -28,40 +28,47 @@ const navigationItems = [
   {
     title: 'Home',
     url: '/',
-    icon: Calendar,
+    icon: 'home' as const,
+    isExternal: false,
   },
   {
     title: 'Collaboration',
     url: '/collaboration',
-    icon: Calendar,
+    icon: 'users' as const,
+    isExternal: false,
   },
   {
     title: 'Committees',
     url: '/committees',
-    icon: Users,
+    icon: 'user-group' as const,
+    isExternal: false,
   },
   {
     title: 'Analytics',
     url: '/analytics',
-    icon: Calendar,
+    icon: 'chart-line' as const,
+    isExternal: false,
   },
 ];
 
 const bottomMenuItems = [
   {
     title: 'Documentation',
-    url: '/documentation',
-    icon: Calendar,
+    url: 'https://docs.linuxfoundation.org/lfx',
+    icon: 'book' as const,
+    isExternal: true,
   },
   {
     title: 'Support',
-    url: '/support',
-    icon: Calendar,
+    url: 'https://jira.linuxfoundation.org/plugins/servlet/desk/portal/4/create/358',
+    icon: 'circle-question' as const,
+    isExternal: true,
   },
   {
     title: 'John Smith',
     url: '/profile',
-    icon: Users,
+    icon: 'user' as const,
+    isExternal: false,
   },
 ];
 
@@ -120,7 +127,7 @@ export function AppSidebar() {
             <DropdownMenu open={isProductMenuOpen} onOpenChange={setIsProductMenuOpen}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                  <FontAwesomeIcon icon="grid" className="h-3 w-3" />
+                  <FontAwesomeIcon icon="grip-vertical" className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" side="right" sideOffset={8} className="w-56">
@@ -185,7 +192,7 @@ export function AppSidebar() {
                             ? 'bg-[#ECF4FF] text-foreground shadow-medium font-semibold border-l-4 border-primary w-full' 
                             : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground hover:shadow-soft w-full'
                         }`}>
-                          <item.icon className={`h-4 w-4 ${isActive ? 'text-foreground' : ''}`} />
+                          <FontAwesomeIcon icon={item.icon} className={`h-4 w-4 ${isActive ? 'text-foreground' : ''}`} />
                           <span>{item.title}</span>
                         </div>
                       )}
@@ -205,20 +212,32 @@ export function AppSidebar() {
                 {bottomMenuItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <NavLink 
-                        to={item.url} 
-                      >
-                        {({ isActive }) => (
-                          <div className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
-                            isActive 
-                              ? 'bg-[#ECF4FF] text-foreground shadow-medium font-semibold border-l-4 border-primary w-full' 
-                              : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground hover:shadow-soft w-full'
-                          }`}>
-                            <item.icon className={`h-4 w-4 ${isActive ? 'text-foreground' : ''}`} />
-                            <span>{item.title}</span>
-                          </div>
-                        )}
-                      </NavLink>
+                      {item.isExternal ? (
+                        <a 
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-muted/50 text-muted-foreground hover:text-foreground hover:shadow-soft w-full"
+                        >
+                          <FontAwesomeIcon icon={item.icon} className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </a>
+                      ) : (
+                        <NavLink 
+                          to={item.url} 
+                        >
+                          {({ isActive }) => (
+                            <div className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                              isActive 
+                                ? 'bg-[#ECF4FF] text-foreground shadow-medium font-semibold border-l-4 border-primary w-full' 
+                                : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground hover:shadow-soft w-full'
+                            }`}>
+                              <FontAwesomeIcon icon={item.icon} className={`h-4 w-4 ${isActive ? 'text-foreground' : ''}`} />
+                              <span>{item.title}</span>
+                            </div>
+                          )}
+                        </NavLink>
+                      )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

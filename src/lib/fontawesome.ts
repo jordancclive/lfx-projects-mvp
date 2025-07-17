@@ -22,7 +22,12 @@ import {
   faCog,
   faUser,
   faLaptopCode,
-  faGripVertical
+  faGripVertical,
+  faHome,
+  faBook,
+  faCircleQuestion,
+  faChartLine,
+  faUserGroup
 } from '@fortawesome/free-solid-svg-icons';
 
 // Add icons to the library
@@ -48,5 +53,10 @@ library.add(
   faCog,
   faUser,
   faLaptopCode,
-  faGripVertical
+  faGripVertical,
+  faHome,
+  faBook,
+  faCircleQuestion,
+  faChartLine,
+  faUserGroup
 );
